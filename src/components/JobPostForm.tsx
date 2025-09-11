@@ -354,7 +354,6 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
                   ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-gray-300'
               } ${hasAttemptedPayment && plan.id === 'basic' ? 'ring-2 ring-green-500 ring-opacity-50' : ''}`}
-              }`}
             >
               {hasAttemptedPayment && plan.id === 'basic' && (
                 <div className="bg-green-100 border border-green-200 rounded-md p-2 mb-4">
