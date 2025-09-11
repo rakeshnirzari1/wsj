@@ -10,10 +10,10 @@ export interface StripeProduct {
 
 export const stripeProducts: StripeProduct[] = [
   {
-    id: 'prod_SzuZUIGYawYS6e',
-    priceId: 'price_1S3uk8GmTeiutA2qtmxUcSo0',
-    name: 'Premium Job Posting',
-    description: 'Premium job posting for 30 days',
+    id: 'featured-job-post',
+    priceId: 'price_1QSvQvGmTeiutA2qhQGvQvGm',
+    name: 'Featured Job Post',
+    description: 'Featured job posting for 30 days',
     price: 9.99,
     currency: 'AUD',
     mode: 'payment'

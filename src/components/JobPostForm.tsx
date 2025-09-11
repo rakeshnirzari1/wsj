@@ -285,7 +285,7 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
 
     try {
       // Find the corresponding Stripe product
-      const stripeProduct = stripeProducts.find(p => p.name === selectedPlan.name);
+      const stripeProduct = stripeProducts.find(p => p.name === 'Featured Job Post');
       if (!stripeProduct) throw new Error('Product not found');
 
       const { url } = await createCheckoutSession({
