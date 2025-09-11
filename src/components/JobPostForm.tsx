@@ -26,6 +26,7 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(editingJob?.companyLogo || null);
+  const [hasAttemptedPayment, setHasAttemptedPayment] = useState(false);
   const { isAuthenticated, user } = useAuth();
   const [formData, setFormData] = useState<JobFormData>({
     title: editingJob?.title || '',
@@ -47,6 +48,25 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
     jobType: 'free',
     categories: editingJob?.categories || []
   });
+
+  // Reset payment attempt flag when step changes
+  React.useEffect(() => {
+    if (step !== 'payment') {
+      setHasAttemptedPayment(false);
+    }
+  }, [step]);
+
+  // Check for canceled payment on component mount
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('canceled') === 'true') {
+      setHasAttemptedPayment(true);
+      setStep('pricing');
+      setMessage({ type: 'error', text: 'Payment was canceled. You can choose the free option or try again.' });
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
 
   const handleInputChange = (field: keyof JobFormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -107,8 +127,10 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
     } else if (step === 'pricing' && selectedPlan) {
       if (selectedPlan.id === 'basic') {
         // Free job, save directly
+        setFormData(prev => ({ ...prev, jobType: 'free' }));
         handleSaveJob();
       } else {
+        setFormData(prev => ({ ...prev, jobType: 'premium' }));
         setStep('payment');
       }
     }
@@ -282,6 +304,7 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
 
     setLoading(true);
     setMessage(null);
+    setHasAttemptedPayment(true);
 
     try {
       // Find the corresponding Stripe product
@@ -291,7 +314,7 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
       const { url } = await createCheckoutSession({
         price_id: stripeProduct.priceId,
         success_url: `${window.location.origin}?success=true`,
-        cancel_url: `${window.location.origin}?canceled=true`,
+        cancel_url: `${window.location.origin}/post?canceled=true`,
         mode: stripeProduct.mode,
       });
 
@@ -300,6 +323,7 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
     } catch (error: any) {
       console.error('Checkout error:', error);
       setMessage({ type: 'error', text: error.message || 'Failed to create checkout session' });
+      setHasAttemptedPayment(false);
     } finally {
       setLoading(false);
     }
@@ -329,8 +353,14 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
                 selectedPlan?.id === plan.id
                   ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 hover:border-gray-300'
+              } ${hasAttemptedPayment && plan.id === 'basic' ? 'ring-2 ring-green-500 ring-opacity-50' : ''}`}
               }`}
             >
+              {hasAttemptedPayment && plan.id === 'basic' && (
+                <div className="bg-green-100 border border-green-200 rounded-md p-2 mb-4">
+                  <p className="text-green-700 text-sm font-medium">✓ No payment required - Post for free!</p>
+                </div>
+              )}
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                 <div className="text-4xl font-bold text-blue-600 mb-2">
@@ -356,6 +386,14 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
             </div>
           ))}
         </div>
+
+        {hasAttemptedPayment && (
+          <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-md">
+            <p className="text-yellow-800 text-sm">
+              <strong>Payment was canceled.</strong> You can still post your job for free using the Free Job Post option above, or try the premium option again.
+            </p>
+          </div>
+        )}
 
         <div className="mt-8 flex justify-between">
           <button
