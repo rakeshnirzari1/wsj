@@ -11,7 +11,7 @@ export interface StripeProduct {
 export const stripeProducts: StripeProduct[] = [
   {
     id: 'featured-job-post',
-    priceId: 'prod_SzuZUIGYawYS6e',
+    priceId: 'price_1S3uk8GmTeiutA2qtmxUcSo0',
     name: 'Featured Job Post',
     description: 'Featured job posting for 30 days',
     price: 9.99,
