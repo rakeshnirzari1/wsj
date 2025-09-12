@@ -115,6 +115,23 @@ export const LocationPage: React.FC = () => {
         meta.content = `Find jobs in ${locationData.name}, Western Sydney. ${locationData.description}. Browse latest job opportunities from top employers.`;
         document.head.appendChild(meta);
       }
+      
+      // Open Graph tags
+      let ogTitle = document.querySelector('meta[property="og:title"]');
+      if (!ogTitle) {
+        ogTitle = document.createElement('meta');
+        ogTitle.setAttribute('property', 'og:title');
+        document.head.appendChild(ogTitle);
+      }
+      ogTitle.setAttribute('content', `Jobs in ${locationData.name} - Western Sydney Jobs`);
+      
+      let ogDescription = document.querySelector('meta[property="og:description"]');
+      if (!ogDescription) {
+        ogDescription = document.createElement('meta');
+        ogDescription.setAttribute('property', 'og:description');
+        document.head.appendChild(ogDescription);
+      }
+      ogDescription.setAttribute('content', `Find jobs in ${locationData.name}, Western Sydney. ${locationData.description}. Browse latest job opportunities from top employers.`);
     }
     
     return () => {

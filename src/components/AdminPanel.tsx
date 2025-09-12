@@ -114,6 +114,23 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
     }
   };
 
+  const handleToggleFeatured = async (jobId: string, isFeatured: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('jobs')
+        .update({ is_featured: isFeatured })
+        .eq('id', jobId);
+      
+      if (error) throw error;
+      setJobs(prev => prev.map(job => 
+        job.id === jobId ? { ...job, featured: isFeatured } : job
+      ));
+    } catch (error) {
+      console.error('Error updating featured status:', error);
+      alert('Failed to update featured status');
+    }
+  };
+
   const handleEditJob = (job: Job) => {
     setEditingJob(job.id);
     setEditForm({
@@ -377,6 +394,17 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ onBack }) => {
                                     className="text-blue-600 hover:text-blue-700"
                                   >
                                     <Edit className="h-4 w-4" />
+                                  </button>
+                                  <button
+                                    onClick={() => handleToggleFeatured(job.id, !job.featured)}
+                                    className={`${
+                                      job.featured
+                                        ? 'text-orange-600 hover:text-orange-700'
+                                        : 'text-purple-600 hover:text-purple-700'
+                                    }`}
+                                    title={job.featured ? 'Remove Featured' : 'Make Featured'}
+                                  >
+                                    {job.featured ? '★' : '☆'}
                                   </button>
                                   <button
                                     onClick={() => handleToggleJobStatus(job.id, !job.isFilled)}

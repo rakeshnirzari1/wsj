@@ -16,6 +16,36 @@ export const CompaniesPage: React.FC<CompaniesPageProps> = ({ onCompanyClick }) 
   // Scroll to top when component mounts
   React.useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Set page title and meta description
+    document.title = 'Top Employers - Western Sydney Jobs';
+    
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Explore leading employers across Western Sydney offering great career opportunities. Find your next job with top companies.');
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'Explore leading employers across Western Sydney offering great career opportunities. Find your next job with top companies.';
+      document.head.appendChild(meta);
+    }
+    
+    // Open Graph tags
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) {
+      ogTitle = document.createElement('meta');
+      ogTitle.setAttribute('property', 'og:title');
+      document.head.appendChild(ogTitle);
+    }
+    ogTitle.setAttribute('content', 'Top Employers - Western Sydney Jobs');
+    
+    return () => {
+      document.title = 'Western Sydney Jobs - Find Your Dream Job in Western Sydney';
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', 'Find your dream job in Western Sydney. Browse thousands of job opportunities from top employers across all industries.');
+      }
+    };
   }, []);
 
   // Fetch companies from database
