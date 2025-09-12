@@ -107,10 +107,6 @@ export const JobCard: React.FC<JobCardProps> = ({
             <span>{formatSalary(job.salary)}</span>
           </div>
         )}
-        <div className="flex items-center">
-          <Users className="h-4 w-4 mr-1" />
-          <span>{job.applications} views</span>
-        </div>
       </div>
 
       <p className="text-gray-700 mb-4 line-clamp-2">

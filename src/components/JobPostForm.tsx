@@ -130,7 +130,7 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
         setFormData(prev => ({ ...prev, jobType: 'free' }));
         handleSaveJob();
       } else {
-        setFormData(prev => ({ ...prev, jobType: 'premium' }));
+        setFormData(prev => ({ ...prev, jobType: 'featured' }));
         setStep('payment');
       }
     }
@@ -244,7 +244,7 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
         salary_currency: formData.currency,
         job_type: formData.type.toLowerCase().replace('-', '_'),
         is_remote: formData.remote,
-        is_featured: formData.jobType === 'premium',
+        is_featured: formData.jobType === 'featured',
         contact_email: formData.contactEmail || null,
         contact_phone: formData.contactPhone || null,
         apply_url: formData.contactApplyUrl || null,
@@ -820,7 +820,7 @@ export const JobPostForm: React.FC<JobPostFormProps> = ({
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Requirements *
+                Requirements
               </label>
               <textarea
                 value={formData.requirements}

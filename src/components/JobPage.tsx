@@ -198,11 +198,92 @@ const ApplyModal: React.FC<{ job: Job; isOpen: boolean; onClose: () => void }> =
   React.useEffect(() => {
     if (job) {
       document.title = `${job.title} at ${job.company} - Western Sydney Jobs`;
+      
+      // Update meta description
+      let metaDescription = document.querySelector('meta[name="description"]');
+      if (!metaDescription) {
+        metaDescription = document.createElement('meta');
+        metaDescription.setAttribute('name', 'description');
+        document.head.appendChild(metaDescription);
+      }
+      metaDescription.setAttribute('content', `${job.title} at ${job.company} in ${job.location}. ${job.description.substring(0, 150)}...`);
+      
+      // Update Open Graph tags
+      let ogTitle = document.querySelector('meta[property="og:title"]');
+      if (!ogTitle) {
+        ogTitle = document.createElement('meta');
+        ogTitle.setAttribute('property', 'og:title');
+        document.head.appendChild(ogTitle);
+      }
+      ogTitle.setAttribute('content', `${job.title} at ${job.company}`);
+      
+      let ogDescription = document.querySelector('meta[property="og:description"]');
+      if (!ogDescription) {
+        ogDescription = document.createElement('meta');
+        ogDescription.setAttribute('property', 'og:description');
+        document.head.appendChild(ogDescription);
+      }
+      ogDescription.setAttribute('content', `${job.title} at ${job.company} in ${job.location}. ${job.description.substring(0, 150)}...`);
+      
+      let ogImage = document.querySelector('meta[property="og:image"]');
+      if (!ogImage) {
+        ogImage = document.createElement('meta');
+        ogImage.setAttribute('property', 'og:image');
+        document.head.appendChild(ogImage);
+      }
+      ogImage.setAttribute('content', job.companyLogo || 'https://westernsydneyjobs.com.au/images/default-job-image.png');
+      
+      let ogUrl = document.querySelector('meta[property="og:url"]');
+      if (!ogUrl) {
+        ogUrl = document.createElement('meta');
+        ogUrl.setAttribute('property', 'og:url');
+        document.head.appendChild(ogUrl);
+      }
+      ogUrl.setAttribute('content', window.location.href);
+      
+      // Twitter Card tags
+      let twitterCard = document.querySelector('meta[name="twitter:card"]');
+      if (!twitterCard) {
+        twitterCard = document.createElement('meta');
+        twitterCard.setAttribute('name', 'twitter:card');
+        document.head.appendChild(twitterCard);
+      }
+      twitterCard.setAttribute('content', 'summary_large_image');
+      
+      let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+      if (!twitterTitle) {
+        twitterTitle = document.createElement('meta');
+        twitterTitle.setAttribute('name', 'twitter:title');
+        document.head.appendChild(twitterTitle);
+      }
+      twitterTitle.setAttribute('content', `${job.title} at ${job.company}`);
+      
+      let twitterDescription = document.querySelector('meta[name="twitter:description"]');
+      if (!twitterDescription) {
+        twitterDescription = document.createElement('meta');
+        twitterDescription.setAttribute('name', 'twitter:description');
+        document.head.appendChild(twitterDescription);
+      }
+      twitterDescription.setAttribute('content', `${job.title} at ${job.company} in ${job.location}. ${job.description.substring(0, 150)}...`);
+      
+      let twitterImage = document.querySelector('meta[name="twitter:image"]');
+      if (!twitterImage) {
+        twitterImage = document.createElement('meta');
+        twitterImage.setAttribute('name', 'twitter:image');
+        document.head.appendChild(twitterImage);
+      }
+      twitterImage.setAttribute('content', job.companyLogo || 'https://westernsydneyjobs.com.au/images/default-job-image.png');
+      
       // Scroll to top when job loads
       window.scrollTo(0, 0);
     }
     return () => {
       document.title = 'Western Sydney Jobs - Find Your Dream Job in Western Sydney';
+      // Reset meta tags
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) {
+        metaDescription.setAttribute('content', 'Find your dream job in Western Sydney. Browse thousands of job opportunities from top employers across all industries.');
+      }
     };
   }, [job]);
 

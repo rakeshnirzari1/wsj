@@ -240,7 +240,7 @@ export const JobsPage: React.FC<JobsPageProps> = ({ onJobClick, companyFilter, c
             </p>
           )}
           <p className="text-gray-600">
-            Showing {filteredJobs.length} of {mockJobs.length} jobs
+            Showing {filteredJobs.length} of {jobs.length} jobs
           </p>
         </div>
 
