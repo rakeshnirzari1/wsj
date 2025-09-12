@@ -197,82 +197,87 @@ const ApplyModal: React.FC<{ job: Job; isOpen: boolean; onClose: () => void }> =
   // Set page title for SEO
   React.useEffect(() => {
     if (job) {
-      document.title = `${job.title} at ${job.company} - Western Sydney Jobs`;
+      const jobTitle = `${job.title} at ${job.company} - Western Sydney Jobs`;
+      const jobDescription = `${job.title} position at ${job.company} in ${job.location}. ${job.description.substring(0, 150)}...`;
+      const jobImage = job.companyLogo || 'https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630';
+      const jobUrl = window.location.href;
+      
+      document.title = jobTitle;
       
       // Update meta description
-      let metaDescription = document.querySelector('meta[name="description"]');
+      let metaDescription = document.getElementById('meta-description') as HTMLMetaElement;
       if (!metaDescription) {
         metaDescription = document.createElement('meta');
         metaDescription.setAttribute('name', 'description');
+        metaDescription.setAttribute('id', 'meta-description');
         document.head.appendChild(metaDescription);
       }
-      metaDescription.setAttribute('content', `${job.title} at ${job.company} in ${job.location}. ${job.description.substring(0, 150)}...`);
+      metaDescription.setAttribute('content', jobDescription);
       
       // Update Open Graph tags
-      let ogTitle = document.querySelector('meta[property="og:title"]');
+      let ogTitle = document.getElementById('og-title') as HTMLMetaElement;
       if (!ogTitle) {
         ogTitle = document.createElement('meta');
         ogTitle.setAttribute('property', 'og:title');
+        ogTitle.setAttribute('id', 'og-title');
         document.head.appendChild(ogTitle);
       }
-      ogTitle.setAttribute('content', `${job.title} at ${job.company}`);
+      ogTitle.setAttribute('content', jobTitle);
       
-      let ogDescription = document.querySelector('meta[property="og:description"]');
+      let ogDescription = document.getElementById('og-description') as HTMLMetaElement;
       if (!ogDescription) {
         ogDescription = document.createElement('meta');
         ogDescription.setAttribute('property', 'og:description');
+        ogDescription.setAttribute('id', 'og-description');
         document.head.appendChild(ogDescription);
       }
-      ogDescription.setAttribute('content', `${job.title} at ${job.company} in ${job.location}. ${job.description.substring(0, 150)}...`);
+      ogDescription.setAttribute('content', jobDescription);
       
-      let ogImage = document.querySelector('meta[property="og:image"]');
+      let ogImage = document.getElementById('og-image') as HTMLMetaElement;
       if (!ogImage) {
         ogImage = document.createElement('meta');
         ogImage.setAttribute('property', 'og:image');
+        ogImage.setAttribute('id', 'og-image');
         document.head.appendChild(ogImage);
       }
-      ogImage.setAttribute('content', job.companyLogo || 'https://westernsydneyjobs.com.au/images/default-job-image.png');
+      ogImage.setAttribute('content', jobImage);
       
-      let ogUrl = document.querySelector('meta[property="og:url"]');
+      let ogUrl = document.getElementById('og-url') as HTMLMetaElement;
       if (!ogUrl) {
         ogUrl = document.createElement('meta');
         ogUrl.setAttribute('property', 'og:url');
+        ogUrl.setAttribute('id', 'og-url');
         document.head.appendChild(ogUrl);
       }
-      ogUrl.setAttribute('content', window.location.href);
+      ogUrl.setAttribute('content', jobUrl);
       
       // Twitter Card tags
-      let twitterCard = document.querySelector('meta[name="twitter:card"]');
-      if (!twitterCard) {
-        twitterCard = document.createElement('meta');
-        twitterCard.setAttribute('name', 'twitter:card');
-        document.head.appendChild(twitterCard);
-      }
-      twitterCard.setAttribute('content', 'summary_large_image');
-      
-      let twitterTitle = document.querySelector('meta[name="twitter:title"]');
+      let twitterTitle = document.getElementById('twitter-title') as HTMLMetaElement;
       if (!twitterTitle) {
         twitterTitle = document.createElement('meta');
         twitterTitle.setAttribute('name', 'twitter:title');
+        twitterTitle.setAttribute('id', 'twitter-title');
         document.head.appendChild(twitterTitle);
       }
-      twitterTitle.setAttribute('content', `${job.title} at ${job.company}`);
+      twitterTitle.setAttribute('content', jobTitle);
       
-      let twitterDescription = document.querySelector('meta[name="twitter:description"]');
+      let twitterDescription = document.getElementById('twitter-description') as HTMLMetaElement;
       if (!twitterDescription) {
         twitterDescription = document.createElement('meta');
         twitterDescription.setAttribute('name', 'twitter:description');
+        twitterDescription.setAttribute('id', 'twitter-description');
         document.head.appendChild(twitterDescription);
       }
-      twitterDescription.setAttribute('content', `${job.title} at ${job.company} in ${job.location}. ${job.description.substring(0, 150)}...`);
+      twitterDescription.setAttribute('content', jobDescription);
       
-      let twitterImage = document.querySelector('meta[name="twitter:image"]');
+      let twitterImage = document.getElementById('twitter-image') as HTMLMetaElement;
       if (!twitterImage) {
         twitterImage = document.createElement('meta');
         twitterImage.setAttribute('name', 'twitter:image');
+        twitterImage.setAttribute('id', 'twitter-image');
         document.head.appendChild(twitterImage);
       }
-      twitterImage.setAttribute('content', job.companyLogo || 'https://westernsydneyjobs.com.au/images/default-job-image.png');
+      twitterImage.setAttribute('content', jobImage);
       
       // Scroll to top when job loads
       window.scrollTo(0, 0);
@@ -280,9 +285,44 @@ const ApplyModal: React.FC<{ job: Job; isOpen: boolean; onClose: () => void }> =
     return () => {
       document.title = 'Western Sydney Jobs - Find Your Dream Job in Western Sydney';
       // Reset meta tags
-      const metaDescription = document.querySelector('meta[name="description"]');
+      const metaDescription = document.getElementById('meta-description') as HTMLMetaElement;
       if (metaDescription) {
-        metaDescription.setAttribute('content', 'Find your dream job in Western Sydney. Browse thousands of job opportunities from top employers across all industries.');
+        metaDescription.setAttribute('content', 'Discover thousands of job opportunities in Western Sydney. Explore top employers across all industries and kickstart your career today!');
+      }
+      
+      const ogTitle = document.getElementById('og-title') as HTMLMetaElement;
+      if (ogTitle) {
+        ogTitle.setAttribute('content', 'Western Sydney Jobs - Find Your Dream Job');
+      }
+      
+      const ogDescription = document.getElementById('og-description') as HTMLMetaElement;
+      if (ogDescription) {
+        ogDescription.setAttribute('content', 'Discover thousands of job opportunities in Western Sydney. Explore top employers across all industries and kickstart your career today!');
+      }
+      
+      const ogImage = document.getElementById('og-image') as HTMLMetaElement;
+      if (ogImage) {
+        ogImage.setAttribute('content', 'https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630');
+      }
+      
+      const ogUrl = document.getElementById('og-url') as HTMLMetaElement;
+      if (ogUrl) {
+        ogUrl.setAttribute('content', 'https://westernsydneyjobs.com.au');
+      }
+      
+      const twitterTitle = document.getElementById('twitter-title') as HTMLMetaElement;
+      if (twitterTitle) {
+        twitterTitle.setAttribute('content', 'Western Sydney Jobs - Find Your Dream Job');
+      }
+      
+      const twitterDescription = document.getElementById('twitter-description') as HTMLMetaElement;
+      if (twitterDescription) {
+        twitterDescription.setAttribute('content', 'Discover thousands of job opportunities in Western Sydney. Explore top employers across all industries and kickstart your career today!');
+      }
+      
+      const twitterImage = document.getElementById('twitter-image') as HTMLMetaElement;
+      if (twitterImage) {
+        twitterImage.setAttribute('content', 'https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&cs=tinysrgb&w=1200&h=630');
       }
     };
   }, [job]);
