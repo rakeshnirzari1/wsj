@@ -61,7 +61,11 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-function AppContent() {
+interface AppContentProps {
+  onAppReady?: () => void;
+}
+
+function AppContent({ onAppReady }: AppContentProps) {
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
@@ -78,8 +82,12 @@ function AppContent() {
   useEffect(() => {
     if (!authLoading) {
       setAppLoading(false);
+      // Notify that the app is ready
+      if (onAppReady) {
+        setTimeout(onAppReady, 100); // Small delay to ensure DOM is ready
+      }
     }
-  }, [authLoading]);
+  }, [authLoading, onAppReady]);
 
   const handlePageChange = (page: string, filterData?: any) => {
     try {
@@ -370,11 +378,15 @@ function AppContent() {
   );
 }
 
-function App() {
+interface AppProps {
+  onAppReady?: () => void;
+}
+
+function App({ onAppReady }: AppProps) {
   return (
     <ErrorBoundary>
       <Router>
-        <AppContent />
+        <AppContent onAppReady={onAppReady} />
       </Router>
     </ErrorBoundary>
   );
