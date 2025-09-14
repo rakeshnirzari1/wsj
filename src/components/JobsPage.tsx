@@ -29,12 +29,24 @@ export const JobsPage: React.FC<JobsPageProps> = ({ onJobClick, companyFilter, c
     const fetchJobs = async () => {
       try {
         setLoading(true);
+        
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+        
+        console.log('Environment check:', {
+          url: supabaseUrl ? 'Present' : 'Missing',
+          key: supabaseKey ? 'Present' : 'Missing',
+          urlValue: supabaseUrl,
+          keyValue: supabaseKey ? 'Hidden' : 'Missing'
+        });
+        
         // Check if Supabase is properly configured
-        if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-          console.warn('Supabase not configured, using mock data');
+        if (!supabaseUrl || !supabaseKey || supabaseUrl === 'undefined' || supabaseKey === 'undefined') {
+          console.warn('Supabase not configured properly, using mock data');
           setJobs(mockJobs);
         } else {
           try {
+            console.log('Attempting to fetch jobs from Supabase...');
             const { data, error } = await supabase
               .from('jobs')
               .select('*')
@@ -42,9 +54,10 @@ export const JobsPage: React.FC<JobsPageProps> = ({ onJobClick, companyFilter, c
               .gte('expires_at', new Date().toISOString());
             
             if (error) {
-              console.error('Error fetching jobs:', error);
+              console.error('Supabase error fetching jobs:', error);
               setJobs(mockJobs);
             } else {
+              console.log('Successfully fetched jobs from Supabase:', data?.length || 0, 'jobs');
               // Transform database data to match Job interface
               const transformedJobs = data.map(job => ({
                 id: job.id,
