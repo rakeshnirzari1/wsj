@@ -35,7 +35,7 @@ export const JobsPage: React.FC<JobsPageProps> = ({ onJobClick, companyFilter, c
         console.log('Using mock data for jobs');
         setJobs(mockJobs);
         
-        // TODO: Uncomment this when Supabase is properly configured
+        
         /*
         if (!isSupabaseConfigured) {
           console.warn('Supabase not configured, using mock data');
