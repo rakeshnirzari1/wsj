@@ -59,18 +59,7 @@
     </div>
     
     <script>
-      // Remove loading fallback once React takes over
-      window.addEventListener('load', function() {
-        // Wait for React to fully load and render
-        setTimeout(function() {
-          const fallback = document.getElementById('loading-fallback');
-          if (fallback) {
-            fallback.remove();
-          }
-        }, 1000);
-      });
-      
-      // Error handling
+      // Improved error handling
       window.addEventListener('error', function(e) {
         console.error('Page error:', e.error);
         const fallback = document.getElementById('loading-fallback');
@@ -91,6 +80,11 @@
             </div>
           `;
         }
+      });
+      
+      // Handle unhandled promise rejections
+      window.addEventListener('unhandledrejection', function(e) {
+        console.error('Unhandled promise rejection:', e.reason);
       });
     </script>
     
