@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { JobCard } from './JobCard';
 import { JobFilters } from './JobFilters';
 import { Job } from '../types';
@@ -29,8 +29,15 @@ export const JobsPage: React.FC<JobsPageProps> = ({ onJobClick, companyFilter, c
     const fetchJobs = async () => {
       try {
         setLoading(true);
-        // Check if Supabase is properly configured
-        if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+        
+        // Always use mock data for now since Supabase isn't configured
+        // This prevents loading issues and provides a consistent experience
+        console.log('Using mock data for jobs');
+        setJobs(mockJobs);
+        
+        // TODO: Uncomment this when Supabase is properly configured
+        /*
+        if (!isSupabaseConfigured) {
           console.warn('Supabase not configured, using mock data');
           setJobs(mockJobs);
         } else {
@@ -85,6 +92,7 @@ export const JobsPage: React.FC<JobsPageProps> = ({ onJobClick, companyFilter, c
             setJobs(mockJobs);
           }
         }
+        */
       } catch (error) {
         console.error('Error:', error);
         setJobs(mockJobs);
