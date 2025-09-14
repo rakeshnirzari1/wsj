@@ -10,18 +10,13 @@ export const useAuth = () => {
   useEffect(() => {
     let mounted = true;
 
-    console.log('useAuth: Initializing auth hook');
-
     // Get initial session
     const getInitialSession = async () => {
       try {
-        console.log('useAuth: Getting initial session...');
         const { data: { session } } = await supabase.auth.getSession();
-        console.log('useAuth: Initial session result:', session ? 'Session found' : 'No session');
         if (mounted) {
           setUser(session?.user ?? null);
           if (session?.user) {
-            console.log('useAuth: Checking admin status for user:', session.user.id);
             await checkAdminStatus(session.user.id);
           }
           setLoading(false);
@@ -41,7 +36,6 @@ export const useAuth = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('useAuth: Auth state changed:', event, session ? 'Session present' : 'No session');
         if (mounted) {
           setUser(session?.user ?? null);
           if (session?.user) {
@@ -62,14 +56,12 @@ export const useAuth = () => {
 
   const checkAdminStatus = async (userId: string) => {
     try {
-      console.log('useAuth: Checking admin status for user:', userId);
       const { data, error } = await supabase
         .from('admin_users')
         .select('is_super_admin')
         .eq('user_id', userId)
         .maybeSingle();
       
-      console.log('useAuth: Admin check result:', { data, error });
       if (!error && data) {
         setIsAdmin(data.is_super_admin || false);
       } else {
